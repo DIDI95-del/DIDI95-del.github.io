@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>出租车收入记账本</title>
+</head>
+<body>
+<h1>出租车收入记账本</h1>
+
+<p>打表价格：<input type="number" id="meter"></p>
+<p>Uber Premium：<input type="number" id="premium"></p>
+<p>DiDi Van：<input type="number" id="van"></p>
+<p>DiDi RideShare：<input type="number" id="ride"></p>
+
+<button onclick="calc()">计算</button>
+
+<h2 id="result">今日营业额：0円</h2>
+
+<script>
+function calc(){
+let total =
+Number(document.getElementById('meter').value || 0) +
+Number(document.getElementById('premium').value || 0) +
+Number(document.getElementById('van').value || 0) +
+Number(document.getElementById('ride').value || 0);
+
+document.getElementById('result').innerHTML =
+"今日营业额：" + total + "円";
+}
+</script>
+
+</body>
+</html>
