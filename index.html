@@ -3,156 +3,147 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>出租车收入仪表盘</title>
+<title>小迪様今日もお疲れ様です💦</title>
 <style>
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f3f4f6;margin:0;padding:16px;color:#111}
-.card{background:white;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 4px 12px #0001}
-h1{font-size:24px}
-input,button,select{width:100%;padding:14px;margin:6px 0 12px;border-radius:12px;border:1px solid #ddd;font-size:16px;box-sizing:border-box}
-button{background:#111;color:white;font-weight:bold}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.big{font-size:28px;font-weight:bold}
-.red{color:#e11d48}
-.green{color:#16a34a}
-.bar{height:18px;background:#ddd;border-radius:20px;overflow:hidden}
-.fill{height:100%;background:#16a34a;width:0%}
-.small{font-size:13px;color:#666}
-.record{border-bottom:1px solid #eee;padding:8px 0}
+:root{--bg:#f3f4f6;--card:#fff;--text:#111827;--muted:#6b7280;--green:#16a34a;--red:#e11d48;--blue:#2563eb;--orange:#f97316;--line:#e5e7eb;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans SC",sans-serif;background:var(--bg);margin:0;padding:16px;color:var(--text);}
+h1{font-size:24px;margin:10px 0 16px}.card{background:var(--card);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+h2{font-size:18px;margin:0 0 12px}label{font-size:14px;color:var(--muted);display:block;margin-top:8px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+input,button,select,textarea{width:100%;padding:13px;margin:6px 0 12px;border-radius:12px;border:1px solid #d1d5db;font-size:16px;background:#fff}button{background:#111827;color:#fff;font-weight:700;border:0}.btn2{background:#2563eb}.btn3{background:#6b7280}.danger{background:#dc2626}.ghost{background:#f3f4f6;color:#111;border:1px solid #ddd}.big{font-size:27px;font-weight:800;line-height:1.2}.mid{font-size:20px;font-weight:700}.small{font-size:13px;color:var(--muted)}.green{color:var(--green)}.red{color:var(--red)}.blue{color:var(--blue)}.orange{color:var(--orange)}
+.bar{height:18px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin-top:8px}.fill{height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);width:0%;transition:.3s}.record{border-top:1px solid var(--line);padding:10px 0}.pill{display:inline-block;background:#eef2ff;color:#3730a3;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700}.warn{background:#fff7ed;border-left:5px solid #f97316}.success{background:#f0fdf4;border-left:5px solid #16a34a}.mono{font-variant-numeric:tabular-nums}.hr{height:1px;background:var(--line);margin:10px 0}
+@media(max-width:420px){body{padding:12px}.big{font-size:24px}.row,.row3{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
-<h1>🚕 出租车收入仪表盘</h1>
-
-<div class="card">
-<label>日期</label>
-<input type="date" id="date">
-
-<label>打表 / GO / Uber Taxi（円）</label>
-<input type="number" id="meter">
-
-<label>Uber Premium（円）</label>
-<input type="number" id="premium">
-
-<label>DiDi Van（円）</label>
-<input type="number" id="van">
-
-<label>DiDi ライドシェア（円）</label>
-<input type="number" id="ride">
-
-<button onclick="saveRecord()">保存今日收入</button>
-</div>
+<h1>🚕 小迪様💦 今日もお疲れ様です！</h1>
 
 <div class="card">
-<h2>今日</h2>
-<div>今日营业额</div>
-<div class="big" id="todayGross">0円</div>
-<div>今日预计到手</div>
-<div class="big green" id="todayTake">0円</div>
+  <h2>今日/补录收入</h2>
+  <label>日期（切换日期会自动读取记录；没有记录会清零）</label>
+  <input type="date" id="date">
+
+  <label>打表 / GO / Uber Taxi（円）</label>
+  <input type="number" id="meter" inputmode="numeric" placeholder="0">
+
+  <label>Uber Premium（円）</label>
+  <input type="number" id="premium" inputmode="numeric" placeholder="0">
+
+  <label>DiDi Van（円）</label>
+  <input type="number" id="van" inputmode="numeric" placeholder="0">
+
+  <label>DiDi ライドシェア（円）</label>
+  <input type="number" id="ride" inputmode="numeric" placeholder="0">
+
+  <button onclick="saveRecord()">保存 / 更新这一天</button>
+  <button class="ghost" onclick="clearInputs()">金额栏清零</button>
+  <div class="small">保存规则：同一天再次保存会覆盖旧记录，方便你修改当天数据。</div>
 </div>
 
 <div class="card">
-<h2>本月冲刺</h2>
-<div>本月公司营业额</div>
-<div class="big" id="monthGross">0円</div>
-
-<p id="progressText"></p>
-<div class="bar"><div class="fill" id="progressBar"></div></div>
-
-<h3 id="rateText"></h3>
-<p class="red" id="motivation"></p>
+  <h2>本期工资周期</h2>
+  <div class="mid mono" id="periodText">-</div>
+  <div class="small" id="paydayText">-</div>
+  <label>查询发薪月份</label>
+  <input type="month" id="periodMonth">
 </div>
 
 <div class="card">
-<h2>工资估算</h2>
-<div class="grid">
-<div>
-<div class="small">公司步合基数</div>
-<div class="big" id="baseAmount">0円</div>
+  <h2>今日</h2>
+  <div>今日营业额</div>
+  <div class="big mono" id="todayGross">0円</div>
+  <div>今日预计到手</div>
+  <div class="big green mono" id="todayTake">0円</div>
+  <div class="small" id="todayNote"></div>
 </div>
-<div>
-<div class="small">公司预计工资</div>
-<div class="big" id="companySalary">0円</div>
-</div>
-</div>
+
+<div class="card warn">
+  <h2>🔥 本期冲刺提醒</h2>
+  <div>本期公司营业额</div>
+  <div class="big mono" id="periodGross">0円</div>
+  <p id="progressText" class="mono"></p>
+  <div class="bar"><div class="fill" id="progressBar"></div></div>
+  <h3 id="rateText"></h3>
+  <p class="red" id="motivation"></p>
 </div>
 
 <div class="card">
-<h2>DiDi RideShare 单独统计</h2>
-<div>本月 RideShare 营业额</div>
-<div class="big" id="rideGross">0円</div>
-<div>预计到手 75%</div>
-<div class="big green" id="rideTake">0円</div>
+  <h2>工资估算</h2>
+  <div class="row">
+    <div><div class="small">公司步合基数</div><div class="big mono" id="baseAmount">0円</div></div>
+    <div><div class="small">公司预计工资</div><div class="big mono" id="companySalary">0円</div></div>
+  </div>
+  <div class="hr"></div>
+  <div class="row3">
+    <div><div class="small">出车天数</div><div class="mid mono" id="workDays">0天</div></div>
+    <div><div class="small">日均公司营业额</div><div class="mid mono" id="avgGross">0円</div></div>
+    <div><div class="small">剩余天数</div><div class="mid mono" id="daysLeft">0天</div></div>
+  </div>
 </div>
 
 <div class="card">
-<h2>本月总预计收入</h2>
-<div class="big green" id="totalSalary">0円</div>
+  <h2>DiDi RideShare 单独统计</h2>
+  <div>本期 RideShare 营业额</div>
+  <div class="big mono" id="rideGross">0円</div>
+  <div>预计到手 75%</div>
+  <div class="big green mono" id="rideTake">0円</div>
+  <div class="small">RideShare 不计入公司步合，单独计算。</div>
+</div>
+
+<div class="card success">
+  <h2>预计25号到账</h2>
+  <div class="big green mono" id="totalSalary">0円</div>
+  <div class="small" id="paydayDetail"></div>
 </div>
 
 <div class="card">
-<h2>查询</h2>
-<label>选择月份</label>
-<input type="month" id="monthSelect" onchange="render()">
-<button onclick="exportCSV()">导出CSV</button>
+  <h2>备份 / 导出</h2>
+  <button class="btn2" onclick="exportCSV()">导出 CSV</button>
+  <button class="btn3" onclick="exportJSON()">备份 JSON</button>
+  <label>恢复 JSON（粘贴备份内容）</label>
+  <textarea id="jsonBox" rows="3" placeholder="把JSON备份粘贴到这里"></textarea>
+  <button class="ghost" onclick="importJSON()">恢复备份</button>
 </div>
 
 <div class="card">
-<h2>历史记录</h2>
-<div id="records"></div>
+  <h2>本期历史记录</h2>
+  <div id="records"></div>
 </div>
 
 <script>
 const KEY="taxi_income_records_v1";
+const RIDESHARE_RATE=0.75;
 
-document.getElementById("date").value=new Date().toISOString().slice(0,10);
-document.getElementById("monthSelect").value=new Date().toISOString().slice(0,7);
-
-function yen(n){return Math.round(n).toLocaleString()+"円";}
+function yen(n){return Math.round(Number(n)||0).toLocaleString()+"円";}
 function num(id){return Number(document.getElementById(id).value||0);}
+function load(){return JSON.parse(localStorage.getItem(KEY)||"[]");}
+function save(data){localStorage.setItem(KEY,JSON.stringify(data));}
+function pad(n){return String(n).padStart(2,"0");}
+function ymd(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());}
+function parseDate(s){const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d);}
 
-function load(){
-  return JSON.parse(localStorage.getItem(KEY)||"[]");
+function periodByPayMonth(payMonth){
+  const [y,m]=payMonth.split("-").map(Number);
+  const start=new Date(y,m-2,16);
+  const end=new Date(y,m-1,15);
+  const payday=new Date(y,m-1,25);
+  return {start:ymd(start),end:ymd(end),payday:ymd(payday),label:`${start.getMonth()+1}/${start.getDate()}～${end.getMonth()+1}/${end.getDate()}`};
 }
-
-function save(data){
-  localStorage.setItem(KEY,JSON.stringify(data));
+function payMonthByDate(dateStr){
+  const d=parseDate(dateStr);
+  let y=d.getFullYear(), m=d.getMonth()+1;
+  if(d.getDate()>=16){m+=1;if(m===13){m=1;y+=1;}}
+  return y+"-"+pad(m);
 }
+function inPeriod(r,p){return r.date>=p.start && r.date<=p.end;}
 
-function saveRecord(){
-  const date=document.getElementById("date").value;
-  if(!date){alert("请选择日期");return;}
-
-  let data=load();
-  data=data.filter(r=>r.date!==date);
-
-  data.push({
-    date,
-    meter:num("meter"),
-    premium:num("premium"),
-    van:num("van"),
-    ride:num("ride")
-  });
-
-  save(data);
-  render();
-  alert("保存好了！");
-}
-
-function companyGross(r){
-  return r.meter+r.premium+r.van;
-}
-
+function companyGross(r){return (r.meter||0)+(r.premium||0)+(r.van||0);}
 function companyBase(r){
-  const normal=(r.meter+r.van)*0.98/1.1;
-  const premium=r.premium*0.8/1.1;
+  const normal=((r.meter||0)+(r.van||0))*0.98/1.1;
+  const premium=(r.premium||0)*0.8/1.1;
   return normal+premium;
 }
-
-function rideTake(r){
-  return r.ride*0.73;
-}
-
+function rideTake(r){return (r.ride||0)*RIDESHARE_RATE;}
 function getRate(gross){
   if(gross<450000)return 0.45;
   if(gross<500000)return 0.53;
@@ -161,102 +152,167 @@ function getRate(gross){
   if(gross<800000)return 0.63;
   return 0.68;
 }
-
 function nextTarget(gross){
-  if(gross<450000)return {target:450000,rate:0.53};
-  if(gross<500000)return {target:500000,rate:0.56};
-  if(gross<550000)return {target:550000,rate:0.60};
-  if(gross<650000)return {target:650000,rate:0.63};
-  if(gross<800000)return {target:800000,rate:0.68};
+  if(gross<450000)return {target:450000,rate:0.53,name:"53%档"};
+  if(gross<500000)return {target:500000,rate:0.56,name:"56%档"};
+  if(gross<550000)return {target:550000,rate:0.60,name:"60%档"};
+  if(gross<650000)return {target:650000,rate:0.63,name:"63%档"};
+  if(gross<800000)return {target:800000,rate:0.68,name:"68%档"};
   return null;
+}
+
+function clearInputs(){
+  ["meter","premium","van","ride"].forEach(id=>document.getElementById(id).value="");
+}
+function loadRecordToInputs(dateStr){
+  const r=load().find(x=>x.date===dateStr);
+  if(r){
+    document.getElementById("meter").value=r.meter||"";
+    document.getElementById("premium").value=r.premium||"";
+    document.getElementById("van").value=r.van||"";
+    document.getElementById("ride").value=r.ride||"";
+  }else{
+    clearInputs();
+  }
+}
+
+function saveRecord(){
+  const date=document.getElementById("date").value;
+  if(!date){alert("请选择日期");return;}
+  let data=load().filter(r=>r.date!==date);
+  data.push({date,meter:num("meter"),premium:num("premium"),van:num("van"),ride:num("ride")});
+  data.sort((a,b)=>a.date.localeCompare(b.date));
+  save(data);
+  document.getElementById("periodMonth").value=payMonthByDate(date);
+  render();
+  alert("保存好了！");
 }
 
 function render(){
   const data=load().sort((a,b)=>b.date.localeCompare(a.date));
-  const today=document.getElementById("date").value;
-  const month=document.getElementById("monthSelect").value;
+  const date=document.getElementById("date").value;
+  const payMonth=document.getElementById("periodMonth").value || payMonthByDate(date);
+  const p=periodByPayMonth(payMonth);
+  const rows=data.filter(r=>inPeriod(r,p));
+  const today=data.find(r=>r.date===date)||{date,meter:0,premium:0,van:0,ride:0};
 
-  const todayData=data.find(r=>r.date===today)||{meter:0,premium:0,van:0,ride:0};
-  const monthData=data.filter(r=>r.date.startsWith(month));
+  const todayGross=companyGross(today)+(today.ride||0);
+  const periodGross=rows.reduce((s,r)=>s+companyGross(r),0);
+  const periodBase=rows.reduce((s,r)=>s+companyBase(r),0);
+  const periodRideGross=rows.reduce((s,r)=>s+(r.ride||0),0);
+  const periodRideTake=rows.reduce((s,r)=>s+rideTake(r),0);
+  const rate=getRate(periodGross);
+  const companySalary=periodBase*rate;
+  const totalSalary=companySalary+periodRideTake;
+  const workDays=rows.filter(r=>companyGross(r)+(r.ride||0)>0).length;
+  const avg=workDays?periodGross/workDays:0;
+  const todayTake=companyBase(today)*rate+rideTake(today);
+  const todayDt=parseDate(ymd(new Date()));
+  const endDt=parseDate(p.end);
+  const daysLeft=Math.max(0,Math.ceil((endDt-todayDt)/(1000*60*60*24))+1);
 
-  const todayGross=companyGross(todayData)+todayData.ride;
-  const todayTake=companyBase(todayData)*getRate(companyGross(todayData))+rideTake(todayData);
-
-  const monthCompanyGross=monthData.reduce((s,r)=>s+companyGross(r),0);
-  const monthBase=monthData.reduce((s,r)=>s+companyBase(r),0);
-  const monthRideGross=monthData.reduce((s,r)=>s+r.ride,0);
-  const monthRideTake=monthData.reduce((s,r)=>s+rideTake(r),0);
-
-  const rate=getRate(monthCompanyGross);
-  const companySalary=monthBase*rate;
-  const totalSalary=companySalary+monthRideTake;
-
+  document.getElementById("periodText").innerText=`${payMonth} 工资期：${p.label}`;
+  document.getElementById("paydayText").innerText=`发薪日：${p.payday}`;
   document.getElementById("todayGross").innerText=yen(todayGross);
   document.getElementById("todayTake").innerText=yen(todayTake);
-  document.getElementById("monthGross").innerText=yen(monthCompanyGross);
-  document.getElementById("baseAmount").innerText=yen(monthBase);
+  document.getElementById("todayNote").innerText=`当前按本期步合 ${Math.round(rate*100)}% 估算`;
+  document.getElementById("periodGross").innerText=yen(periodGross);
+  document.getElementById("baseAmount").innerText=yen(periodBase);
   document.getElementById("companySalary").innerText=yen(companySalary);
-  document.getElementById("rideGross").innerText=yen(monthRideGross);
-  document.getElementById("rideTake").innerText=yen(monthRideTake);
+  document.getElementById("rideGross").innerText=yen(periodRideGross);
+  document.getElementById("rideTake").innerText=yen(periodRideTake);
   document.getElementById("totalSalary").innerText=yen(totalSalary);
-  document.getElementById("rateText").innerText="当前步合："+Math.round(rate*100)+"%";
+  document.getElementById("paydayDetail").innerText=`公司工资 + RideShare 75%，预计 ${p.payday} 到账`;
+  document.getElementById("rateText").innerText=`当前步合：${Math.round(rate*100)}%`;
+  document.getElementById("workDays").innerText=workDays+"天";
+  document.getElementById("avgGross").innerText=yen(avg);
+  document.getElementById("daysLeft").innerText=daysLeft+"天";
 
-  const next=nextTarget(monthCompanyGross);
+  const next=nextTarget(periodGross);
   if(next){
-    const lack=next.target-monthCompanyGross;
-    const percent=Math.min(100,monthCompanyGross/next.target*100);
+    const lack=next.target-periodGross;
+    const percent=Math.min(100,periodGross/next.target*100);
+    const needPerDay=daysLeft?lack/daysLeft:lack;
+    const bonus=periodBase*(next.rate-rate);
     document.getElementById("progressBar").style.width=percent+"%";
-    document.getElementById("progressText").innerText=
-      yen(monthCompanyGross)+" / "+yen(next.target)+"　完成率 "+Math.round(percent)+"%";
-
-    const bonus=monthBase*(next.rate-rate);
+    document.getElementById("progressText").innerText=`${yen(periodGross)} / ${yen(next.target)}　完成率 ${Math.round(percent)}%`;
     document.getElementById("motivation").innerHTML=
-      "🔥 距离下一档还差 <b>"+yen(lack)+"</b><br>"+
-      "冲上去后，预计本月多拿 <b>"+yen(bonus)+"</b><br>"+
-      "今天早点收车？还是再冲一波？";
+      `距离 <b>${next.name}</b> 还差 <b>${yen(lack)}</b><br>`+
+      `本期剩余 <b>${daysLeft}天</b>，平均每天还需要 <b>${yen(needPerDay)}</b><br>`+
+      `冲上去后，预计本期多拿 <b>${yen(bonus)}</b><br>`+
+      `今天早点收车？还是再冲一波？`;
   }else{
     document.getElementById("progressBar").style.width="100%";
-    document.getElementById("progressText").innerText="已经进入最高冲刺区间";
-    document.getElementById("motivation").innerText="🏆 80万以上部分按68%，现在每多跑一点都很香。";
+    document.getElementById("progressText").innerText="已经进入80万以上最高冲刺区间";
+    document.getElementById("motivation").innerHTML="🏆 80万以上部分按68%，现在每多跑一点都很香。";
   }
 
   const box=document.getElementById("records");
   box.innerHTML="";
-  monthData.forEach(r=>{
+  if(!rows.length){box.innerHTML='<div class="small">本期还没有记录。</div>';return;}
+  rows.sort((a,b)=>b.date.localeCompare(a.date)).forEach(r=>{
     box.innerHTML+=`
-    <div class="record">
-      <b>${r.date}</b><br>
-      打表/GO/Uber Taxi：${yen(r.meter)}<br>
-      Uber Premium：${yen(r.premium)}<br>
-      DiDi Van：${yen(r.van)}<br>
-      RideShare：${yen(r.ride)}<br>
-      <button onclick="deleteRecord('${r.date}')">删除</button>
-    </div>`;
+      <div class="record">
+        <span class="pill">${r.date}</span><br>
+        打表/GO/Uber Taxi：${yen(r.meter||0)}<br>
+        Uber Premium：${yen(r.premium||0)}<br>
+        DiDi Van：${yen(r.van||0)}<br>
+        RideShare：${yen(r.ride||0)}<br>
+        <div class="small">公司营业额：${yen(companyGross(r))} / 预计到手：${yen(companyBase(r)*rate+rideTake(r))}</div>
+        <button class="btn2" onclick="editRecord('${r.date}')">修改这天</button>
+        <button class="danger" onclick="deleteRecord('${r.date}')">删除</button>
+      </div>`;
   });
 }
 
+function editRecord(date){
+  document.getElementById("date").value=date;
+  loadRecordToInputs(date);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
 function deleteRecord(date){
   if(!confirm("删除这一天记录？"))return;
   save(load().filter(r=>r.date!==date));
+  if(document.getElementById("date").value===date)clearInputs();
   render();
 }
-
 function exportCSV(){
   const data=load();
   let csv="日期,打表GO UberTaxi,Uber Premium,DiDi Van,DiDi RideShare\n";
-  data.forEach(r=>{
-    csv+=`${r.date},${r.meter},${r.premium},${r.van},${r.ride}\n`;
-  });
-  const blob=new Blob([csv],{type:"text/csv"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="taxi_income.csv";
-  a.click();
+  data.forEach(r=>{csv+=`${r.date},${r.meter||0},${r.premium||0},${r.van||0},${r.ride||0}\n`;});
+  const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="taxi_income.csv";a.click();
+}
+function exportJSON(){
+  const text=JSON.stringify(load(),null,2);
+  navigator.clipboard?.writeText(text);
+  document.getElementById("jsonBox").value=text;
+  alert("JSON备份已显示，支持的话也已复制到剪贴板。请保存好。");
+}
+function importJSON(){
+  try{
+    const arr=JSON.parse(document.getElementById("jsonBox").value);
+    if(!Array.isArray(arr))throw new Error();
+    save(arr);
+    render();
+    alert("恢复完成");
+  }catch(e){alert("JSON格式不对，无法恢复");}
 }
 
-render();
+(function init(){
+  const today=ymd(new Date());
+  document.getElementById("date").value=today;
+  document.getElementById("periodMonth").value=payMonthByDate(today);
+  document.getElementById("date").addEventListener("change",e=>{
+    loadRecordToInputs(e.target.value);
+    document.getElementById("periodMonth").value=payMonthByDate(e.target.value);
+    render();
+  });
+  document.getElementById("periodMonth").addEventListener("change",render);
+  ["meter","premium","van","ride"].forEach(id=>document.getElementById(id).addEventListener("input",render));
+  loadRecordToInputs(today);
+  render();
+})();
 </script>
-
 </body>
 </html>
-
