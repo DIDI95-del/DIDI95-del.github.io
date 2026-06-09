@@ -4,16 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>小迪様辛苦啦💦</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;padding:14px;background:#f4f4f5;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111}
+body{
+  margin:0;
+  padding:14px;
+  background:#f4f4f5;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:#111827;
+}
 h1{font-size:24px;margin:10px 0 16px}
 h2{font-size:18px;margin:0 0 12px}
-.card{background:#fff;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.card{
+  background:#fff;
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:0 4px 12px rgba(0,0,0,.06);
+}
 label{font-size:14px;color:#555;display:block;margin-top:8px}
-input,button,select{
+input,button,textarea{
   width:100%;
-  height:50px;
+  min-height:50px;
   padding:0 14px;
   margin:6px 0 12px;
   border-radius:12px;
@@ -21,31 +34,52 @@ input,button,select{
   font-size:16px;
   background:#fff;
   color:#111;
-  appearance:none;
-  -webkit-appearance:none;
 }
 input[type="date"]{
-  min-height:50px;
+  appearance:auto;
+  -webkit-appearance:auto;
+  height:50px;
   line-height:50px;
-  text-align:left;
 }
-input[type="date"]::-webkit-date-and-time-value{
-  text-align:left;
+button{
+  background:#111827;
+  color:#fff;
+  font-weight:bold;
+  border:0;
 }
-button{background:#111;color:#fff;font-weight:bold;border:0}
-button.gray{background:#666}
+button.gray{background:#6b7280}
 button.red{background:#dc2626}
+button.green{background:#16a34a}
 .big{font-size:28px;font-weight:800}
-.green{color:#16a34a}
+.mid{font-size:20px;font-weight:700}
+.greenText{color:#16a34a}
 .redText{color:#e11d48}
-.small{font-size:13px;color:#666}
-.bar{height:18px;background:#ddd;border-radius:99px;overflow:hidden}
-.fill{height:100%;background:#16a34a;width:0%}
-.record{border-top:1px solid #eee;padding:10px 0}
+.small{font-size:13px;color:#666;line-height:1.5}
+.bar{
+  height:18px;
+  background:#ddd;
+  border-radius:99px;
+  overflow:hidden;
+}
+.fill{
+  height:100%;
+  background:#16a34a;
+  width:0%;
+}
+.record{
+  border-top:1px solid #eee;
+  padding:10px 0;
+}
+textarea{
+  height:150px;
+  padding:10px;
+  font-size:13px;
+}
 </style>
 </head>
 
 <body>
+
 <h1>🚕 小迪様辛苦啦💦</h1>
 
 <div class="card">
@@ -68,6 +102,10 @@ button.red{background:#dc2626}
 
 <button onclick="saveRecord()">保存 / 更新</button>
 <button class="gray" onclick="clearInputs()">金额清零</button>
+
+<div class="small">
+切换日期时：有记录会自动读取，没有记录会自动清零，防止误操作。
+</div>
 </div>
 
 <div class="card">
@@ -75,13 +113,13 @@ button.red{background:#dc2626}
 <div>今日营业额</div>
 <div class="big" id="todayGross">0円</div>
 <div>今日预计到手</div>
-<div class="big green" id="todayTake">0円</div>
+<div class="big greenText" id="todayTake">0円</div>
 </div>
 
 <div class="card">
 <h2>工资周期</h2>
-<div id="periodText"></div>
-<div class="small" id="paydayText"></div>
+<div class="mid" id="periodText">-</div>
+<div class="small" id="paydayText">-</div>
 </div>
 
 <div class="card">
@@ -96,27 +134,44 @@ button.red{background:#dc2626}
 
 <div class="card">
 <h2>工资估算</h2>
+
 <div>公司步合基数</div>
 <div class="big" id="baseAmount">0円</div>
 
 <div>公司预计工资</div>
-<div class="big green" id="companySalary">0円</div>
+<div class="big greenText" id="companySalary">0円</div>
 
 <br>
 
-<div>RideShare 到手</div>
-<div class="big green" id="rideSalary">0円</div>
+<div>DiDi RideShare 到手</div>
+<div class="big greenText" id="rideSalary">0円</div>
+<div class="small">RideShare：先去消费税，再拿75%。不参与步合。</div>
 
 <br>
 
 <div>预计25号到账</div>
-<div class="big green" id="totalSalary">0円</div>
+<div class="big greenText" id="totalSalary">0円</div>
 </div>
 
 <div class="card">
 <h2>统计</h2>
 <div>本期出车天数：<b id="workDays">0天</b></div>
 <div>日均公司营业额：<b id="avgGross">0円</b></div>
+</div>
+
+<div class="card">
+<h2>数据备份 / 恢复</h2>
+
+<button class="green" onclick="exportJSON()">导出备份JSON</button>
+
+<label>粘贴备份JSON</label>
+<textarea id="jsonBox" placeholder="把备份JSON粘贴到这里"></textarea>
+
+<button class="gray" onclick="importJSON()">恢复备份</button>
+
+<div class="small">
+换手机/iPad时：旧设备导出JSON → 新设备粘贴 → 恢复。
+</div>
 </div>
 
 <div class="card">
@@ -174,18 +229,25 @@ function clearInputs(){
 function loadDateRecord(){
   const date=document.getElementById("date").value;
   const r=load().find(x=>x.date===date);
+
   if(r){
     document.getElementById("meter").value=r.meter||"";
     document.getElementById("premium").value=r.premium||"";
     document.getElementById("van").value=r.van||"";
     document.getElementById("ride").value=r.ride||"";
   }else{
-    clearInputs();
+    document.getElementById("meter").value="";
+    document.getElementById("premium").value="";
+    document.getElementById("van").value="";
+    document.getElementById("ride").value="";
   }
+
+  render();
 }
 
 function saveRecord(){
   const date=document.getElementById("date").value;
+
   if(!date){
     alert("请选择日期");
     return;
@@ -194,14 +256,16 @@ function saveRecord(){
   let data=load().filter(r=>r.date!==date);
 
   data.push({
-    date:date,
+    date,
     meter:num("meter"),
     premium:num("premium"),
     van:num("van"),
     ride:num("ride")
   });
 
+  data.sort((a,b)=>a.date.localeCompare(b.date));
   save(data);
+
   alert("保存好了");
   render();
 }
@@ -210,18 +274,25 @@ function getPayMonth(date){
   const d=parseDate(date);
   let y=d.getFullYear();
   let m=d.getMonth()+1;
+
   if(d.getDate()>=16){
     m++;
-    if(m===13){m=1;y++;}
+    if(m===13){
+      m=1;
+      y++;
+    }
   }
+
   return {year:y,month:m};
 }
 
 function getPeriod(date){
   const pm=getPayMonth(date);
+
   const start=new Date(pm.year,pm.month-2,16);
   const end=new Date(pm.year,pm.month-1,15);
   const payday=new Date(pm.year,pm.month-1,25);
+
   return {
     start:dateStr(start),
     end:dateStr(end),
@@ -304,17 +375,21 @@ function render(){
   document.getElementById("avgGross").innerText=yen(workDays?periodGross/workDays:0);
 
   const next=nextTarget(periodGross);
+
   if(next){
     const lack=next.target-periodGross;
     const percent=Math.min(100,periodGross/next.target*100);
-    const today=new Date();
+
+    const now=new Date();
     const end=parseDate(period.end);
-    const left=Math.max(1,Math.ceil((end-today)/(1000*60*60*24))+1);
+    const left=Math.max(1,Math.ceil((end-now)/(1000*60*60*24))+1);
     const perDay=lack/left;
     const bonus=periodBase*(next.rate-rate);
 
     document.getElementById("progressBar").style.width=percent+"%";
-    document.getElementById("progressText").innerText=`${yen(periodGross)} / ${yen(next.target)}　完成率 ${Math.round(percent)}%`;
+    document.getElementById("progressText").innerText=
+      `${yen(periodGross)} / ${yen(next.target)}　完成率 ${Math.round(percent)}%`;
+
     document.getElementById("motivation").innerHTML=
       `距离 ${next.name} 还差 <b>${yen(lack)}</b><br>`+
       `剩余 ${left} 天，平均每天还需要 <b>${yen(perDay)}</b><br>`+
@@ -323,7 +398,8 @@ function render(){
   }else{
     document.getElementById("progressBar").style.width="100%";
     document.getElementById("progressText").innerText="已进入最高冲刺区间";
-    document.getElementById("motivation").innerText="🏆 80万以上按68%，每多跑一点都很香。";
+    document.getElementById("motivation").innerText=
+      "🏆 80万以上按68%，每多跑一点都很香。";
   }
 
   const box=document.getElementById("records");
@@ -356,27 +432,60 @@ function editRecord(date){
 
 function deleteRecord(date){
   if(!confirm("删除这一天记录吗？"))return;
+
   const data=load().filter(r=>r.date!==date);
   save(data);
+
   loadDateRecord();
   render();
 }
 
+function exportJSON(){
+  const text=JSON.stringify(load(),null,2);
+  document.getElementById("jsonBox").value=text;
+
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text);
+  }
+
+  alert("备份JSON已生成。可以复制保存，或发到手机。");
+}
+
+function importJSON(){
+  try{
+    const text=document.getElementById("jsonBox").value.trim();
+    const data=JSON.parse(text);
+
+    if(!Array.isArray(data)){
+      alert("格式不对，必须是JSON数组");
+      return;
+    }
+
+    save(data);
+    loadDateRecord();
+    render();
+
+    alert("恢复完成！");
+  }catch(e){
+    alert("JSON格式错误，恢复失败");
+  }
+}
+
 document.addEventListener("DOMContentLoaded",function(){
   document.getElementById("date").value=todayStr();
-  loadDateRecord();
 
   document.getElementById("date").addEventListener("change",function(){
     loadDateRecord();
-    render();
   });
 
   ["meter","premium","van","ride"].forEach(id=>{
     document.getElementById(id).addEventListener("input",render);
   });
 
+  loadDateRecord();
   render();
 });
 </script>
+
 </body>
 </html>
